@@ -1,0 +1,5 @@
+---
+- name: install consul server
+  hosts:  consul_servers
+  roles:
+    - consul
