@@ -5,7 +5,8 @@ If you are using Terraform for the first time, follow below to install.
 ## Prerequisites
 
 [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and set AWS environment variables as given below.
-[Install Terraform](https://developer.hashicorp.com/terraform/install)
+
+[Install Terraform](https://developer.hashicorp.com/terraform/install) if not installed.
 
 ```bash
 export AWS_ACCESS_KEY_ID="<AWS_ACCESS_KEY_ID>"
