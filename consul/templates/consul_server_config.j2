@@ -1,0 +1,43 @@
+# -----------------------------+
+# consul.hcl                   |
+# -----------------------------+
+
+#Nodes
+node_name   =   "{{ inventory_hostname }}"
+server      =   true
+
+retry_join  =   {{ groups['all'] | map('extract', hostvars, [ 'ansible_facts', 'default_ipv4', 'address']) | list| to_json }}
+
+#UI
+ui_config {
+  enabled = true
+  }
+addresses {
+  http = "0.0.0.0"
+  }
+
+# Data Persistence
+data_dir = "/opt/consul/"
+
+# Logging
+log_level = "{{ log_level }}"
+enable_syslog = true
+
+## Automatically reload reloadable configuration
+auto_reload_config = true
+
+#Keys
+
+tls {
+    defaults {
+        verify_incoming = true
+        verify_outgoing = true
+        ca_file = "/etc/consul.d/consul-agent-ca.pem"
+        cert_file = "/etc/consul.d/dc1-server-consul-0.pem"
+        key_file = "/etc/consul.d/dc1-server-consul-0-key.pem"
+        verify_server_hostname = true
+    }
+}
+#encrypt={{ gossip_key.stdout }}
+
+bootstrap_expect= {{ groups['all'] | length }}

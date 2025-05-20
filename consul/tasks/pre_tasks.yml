@@ -1,0 +1,6 @@
+---
+- name: ensuring packages
+  ansible.builtin.yum:
+    name:
+      - zip
+    state:  present

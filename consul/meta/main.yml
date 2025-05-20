@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Dhanushka Jothirathne <jothirathneds@gmail.com>
+  description: Install Hashicorp Consul server
+  galaxy_tags:
+    - consul
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions:
+        - 8
+        - 9

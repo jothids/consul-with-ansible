@@ -1,0 +1,93 @@
+---
+- name: install apps
+  include_tasks:  pre_tasks.yml
+
+- name: Create Consul Group
+  ansible.builtin.group:
+    name: "{{ consul_group }}"
+    state: present
+
+- name: Create Consul User
+  ansible.builtin.user:
+    name: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    state: present
+
+- name: Create Configuration Directory
+  ansible.builtin.file:
+    path: /etc/consul.d
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0750
+    state: directory
+
+- name: Create Consul Directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0750
+    state: directory
+  loop:
+    - "/opt/consul"
+    - "/var/log/consul"
+
+- name: Check for current intallations
+  ansible.builtin.command:  which consul
+  register: current_consul
+  changed_when: '"no consul" not in current_consul.stdout'
+  ignore_errors:  true
+
+- name: Set OS Architecture
+  ansible.builtin.set_fact:
+    os_arch:  "{{ 'amd64' if ansible_facts['machine']  == 'x86_64' else 'aarch64' }}"
+
+- name: Download and Install Consul
+  ansible.builtin.unarchive:
+    src: "{{ consul_download_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0750
+  when: '"no consul" not in current_consul.stdout'
+
+- name: Generate Gossip Key
+  ansible.builtin.command:  /usr/local/bin/consul keygen
+  register: gossip_key
+
+- name: Generate CA Cert
+  ansible.builtin.command:  /usr/local/bin/consul tls ca create -domain={{ consul_domain }}
+  register: ca_out
+  changed_when: '"Saved" in ca_out.stdout'
+  ignore_errors:  true
+
+- name: Generate Server Cert
+  ansible.builtin.command:  /usr/local/bin/consul tls cert create -server -domain={{ consul_domain }} -dc={{ consul_datacenter }}
+  register: server_out
+  ignore_errors:  true
+
+- name: Push Certs to Consul Config Directory
+  ansible.builtin.shell: |
+    mv  ./*.pem /etc/consul.d/ && chmod 0640 /etc/consul.d/* -R && chown -R "{{ consul_user }}.{{ consul_group }}" /etc/consul.d/*
+  args:
+    executable: /bin/bash
+    
+- name: Copy Server Config
+  ansible.builtin.template:
+    src: consul_server_config.j2
+    dest: /etc/consul.d/consul.hcl
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0640
+  when: inventory_hostname  in  groups['consul_servers']
+
+- name: Configure Systemd and start Consul
+  ansible.builtin.template:
+    src: systemd.j2
+    dest: /etc/systemd/system/consul.service
+    owner: "root"
+    group: "root"
+    mode: 0750
+  notify:
+    - start_consul

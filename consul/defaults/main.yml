@@ -1,0 +1,15 @@
+---
+#consul app defaults
+
+consul_version: "1.21.0"
+
+#consul user and group defaults
+consul_user: "consul"
+consul_group: "consul"
+
+#consul cluster
+consul_domain: "consul"
+consul_datacenter:  "dc1"
+
+#consul logging defaults
+log_level: "INFO"

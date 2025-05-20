@@ -1,0 +1,6 @@
+---
+- name: start_consul
+  ansible.builtin.service:
+    name: consul
+    state: started
+    enabled:  true
