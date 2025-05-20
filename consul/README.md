@@ -1,17 +1,25 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role can be used to deploy Hashicorp Consul Server on Linux Distributions.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role is created to be used with ansible-navigator. Make sure to install and configure ansible navigator on ansible controller.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### Default
+Default Variables defined in this role. This can be edited or used as it is.
+
+    consul_group:       # Default group name (consul)
+    consul_user:        # Default service username (consul)
+    consul_version:     # Default consul version (1.21.0)
+    consul_dns:         # Default consul dns name (consul)
+    consul_datacenter:  # Default name for consul data center (dc1)
+    log_level:          # Default log level (INFO)
 
 Dependencies
 ------------
@@ -21,18 +29,17 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Following Playbook is can be used to deploy consul server in server mode. It will automatically create required certs. In your inventory, create a server block named "consul_servers"
 
-    - hosts: servers
+    ---
+    - name: consul server
+      hosts:  consul_servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - consul
 
 License
--------
-
-BSD
+N/A
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Dhanushka Jothirathne - 2025
