@@ -15,6 +15,8 @@ export AWS_SECRET_ACCESS_KEY="<AWS_SECRET_ACCESS_KEY>"
 
 # How to execute the terraform
 
+Download centos-8-stream.tf and run following commands to start the VM.
+
 ### Step 1 : Init
 
 ```
