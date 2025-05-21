@@ -8,7 +8,7 @@ data "aws_vpc" "default" {
 resource "aws_instance" "centos_stream8" {
   ami           = "ami-05f2b469e504202f7"
   instance_type = "t3.nano"
-  key_name      = "Nvirginia" # Replace with your key pair name
+  key_name      = "<key-pair-name>" # Replace with your key pair name
   tags = {
     Name = "CentOS-Stream8-Instance"
   }
@@ -21,8 +21,8 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = data.aws_vpc.default.id
   ingress {
     description = "SSH"
-    from_port   = 22
-    to_port     = 22
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] 
   }
