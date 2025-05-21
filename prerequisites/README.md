@@ -12,7 +12,9 @@ If you are using Terraform for the first time, follow below to install.
 export AWS_ACCESS_KEY_ID="<AWS_ACCESS_KEY_ID>"
 export AWS_SECRET_ACCESS_KEY="<AWS_SECRET_ACCESS_KEY>"
 ```
-
+# Variables
+key_name      - Replace the value with an available key pair.
+ami           - Provide ami compatiple with Linux. Recommending to use ami-05a5bb48beb785bf1 as the ami in us-east-1.
 # How to execute the terraform
 
 Download centos-8-stream.tf and run following commands to start the VM.
