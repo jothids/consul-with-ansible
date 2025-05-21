@@ -1,0 +1,16 @@
+{
+    "service": {
+        "name": "docker-registry",
+        "id": "docker-registry",
+        "tags": [
+            "docker", "registry"
+        ],
+        "address": "127.0.0.1",
+        "port": 5000,
+        "check": {
+            "http": "http://127.0.0.1:5000/v2/_catalog",
+            "interval": "10s",
+            "timeout": "2s"
+        }
+    }
+}
