@@ -5,7 +5,7 @@
 #Nodes
 node_name   =   "{{ inventory_hostname }}"
 server      =   true
-
+bind_addr = "{{ ansible_default_ipv4.address }}"
 retry_join  =   {{ groups['all'] | map('extract', hostvars, [ 'ansible_facts', 'default_ipv4', 'address']) | list| to_json }}
 
 #UI
